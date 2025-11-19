@@ -10,16 +10,23 @@ class Liquidacion extends Model
 
     protected $fillable = [
         'empleado_id',
-        'mes',
-        'anio',
-        'total_bruto',
+        'periodo',          
+        'total_haberes',
         'total_descuentos',
-        'total_neto',
+        'neto',
+        'estado',
+        'pagada_at',
+        'metadata',
     ];
 
-    public function conceptos()
+    protected $casts = [
+        'metadata' => 'array',
+        'pagada_at' => 'datetime',
+    ];
+
+    public function items()
     {
-        return $this->hasMany(LiquidacionItem::class);
+        return $this->hasMany(LiquidacionItem::class, 'liquidacion_id');
     }
 
     public function empleado()

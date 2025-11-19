@@ -3,6 +3,8 @@
 use App\Http\Controllers\{
     AuditoriaController,
     AuthController,
+    ConceptoController,
+    EmpleadoController,
     LiquidacionController,
     OrdenDiariaController,
     RegistroController,
@@ -28,6 +30,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/liquidaciones/{id}', [LiquidacionController::class, 'show']);
     Route::put('/liquidaciones/{id}', [LiquidacionController::class, 'update']);
     Route::post('/liquidaciones/{id}/pagar', [LiquidacionController::class, 'markAsPaid']);
+
+    // Conceptos
+    Route::apiResource('/conceptos', ConceptoController::class);
+
+    // Empleados
+    Route::apiResource('/empleados', EmpleadoController::class);
 
     // Votaciones
     Route::get('/votaciones/exportar', [VotacionController::class, 'exportarVotaciones']);

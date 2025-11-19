@@ -12,6 +12,9 @@ class DatabaseSeeder extends Seeder
             RolesSeeder::class,
             SeccionalSeeder::class,
             UsuarioSeeder::class,
+            ConceptosSeeder::class,
+            EmpleadosSeeder::class,
+            LiquidacionesSeeder::class,
         ]);
     }
 }

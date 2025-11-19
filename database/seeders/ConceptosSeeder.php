@@ -1,15 +1,51 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
-use App\Models\Concepto;
-class ConceptosSeeder extends Seeder {
-    public function run() {
-        $conceptos = [
-            ['codigo'=>'BAS','descripcion'=>'Sueldo Básico','tipo'=>'HABER','monto_default'=>0],
-            ['codigo'=>'AGU','descripcion'=>'Aguinaldo','tipo'=>'HABER','monto_default'=>0],
-            ['codigo'=>'AFP','descripcion'=>'Aporte Jubilatorio','tipo'=>'DESCUENTO','monto_default'=>0],
-            ['codigo'=>'OBR','descripcion'=>'Obra Social','tipo'=>'DESCUENTO','monto_default'=>0],
-        ];
-        foreach($conceptos as $c) Concepto::create($c);
+use Illuminate\Support\Facades\DB;
+
+class ConceptosSeeder extends Seeder
+{
+    public function run(): void
+    {
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('conceptos')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        DB::table('conceptos')->insert([
+            [
+                'codigo'         => 'BAS',
+                'descripcion'    => 'Sueldo Básico',
+                'tipo'           => 'HABER',
+                'monto_default'  => 0,
+                'created_at'     => now(),
+                'updated_at'     => now(),
+            ],
+            [
+                'codigo'         => 'AGU',
+                'descripcion'    => 'Aguinaldo',
+                'tipo'           => 'HABER',
+                'monto_default'  => 0,
+                'created_at'     => now(),
+                'updated_at'     => now(),
+            ],
+            [
+                'codigo'         => 'AFP',
+                'descripcion'    => 'Aporte Jubilatorio',
+                'tipo'           => 'DESCUENTO',
+                'monto_default'  => 0,
+                'created_at'     => now(),
+                'updated_at'     => now(),
+            ],
+            [
+                'codigo'         => 'OBR',
+                'descripcion'    => 'Obra Social',
+                'tipo'           => 'DESCUENTO',
+                'monto_default'  => 0,
+                'created_at'     => now(),
+                'updated_at'     => now(),
+            ],
+        ]);
     }
 }
