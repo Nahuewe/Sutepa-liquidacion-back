@@ -15,8 +15,8 @@ class LiquidacionesExport implements FromCollection, WithHeadings {
         if ($this->periodo) $q->where('periodo', $this->periodo);
         return $q->get()->map(function($l) {
             return [
-                'id' => $l->id,
                 'empleado' => $l->empleado->nombre . ' ' . $l->empleado->apellido,
+                'CUIL' => $l->empleado->cuil,
                 'periodo' => $l->periodo,
                 'haberes' => $l->total_haberes,
                 'descuentos' => $l->total_descuentos,
@@ -27,6 +27,6 @@ class LiquidacionesExport implements FromCollection, WithHeadings {
     }
 
     public function headings(): array {
-        return ['ID','Empleado','Periodo','Haberes','Descuentos','Neto','Estado'];
+        return ['Empleado', 'CUIL', 'Periodo','Haberes','Descuentos','Neto','Estado'];
     }
 }

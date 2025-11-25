@@ -8,9 +8,35 @@ use Illuminate\Http\Request;
 
 class EmpleadoController extends Controller
 {
-    public function index()
+    public function index(Request $req)
     {
-        return response()->json(Empleado::all());
+        $perPage = $req->get('per_page', 15);
+        $search = $req->get('search');
+
+        $query = Empleado::query();
+
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('nombre', 'LIKE', "%{$search}%")
+                    ->orWhere('apellido', 'LIKE', "%{$search}%")
+                    ->orWhere('cuil', 'LIKE', "%{$search}%")
+                    ->orWhere('legajo', 'LIKE', "%{$search}%");
+            });
+        }
+
+        $paginator = $query->orderBy('apellido')->paginate($perPage);
+
+        return response()->json([
+            'data' => $paginator->items(),
+            'meta' => [
+                'current_page' => $paginator->currentPage(),
+                'per_page'     => $paginator->perPage(),
+                'last_page'    => $paginator->lastPage(),
+                'total'        => $paginator->total(),
+                'from'         => $paginator->firstItem(),
+                'to'           => $paginator->lastItem(),
+            ]
+        ]);
     }
 
     public function store(Request $request)

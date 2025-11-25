@@ -25,11 +25,13 @@ Route::post('/refresh-token', [AuthController::class, 'refreshToken'])->middlewa
 Route::middleware('auth:sanctum')->group(function () {
 
     // Liquidacion
+    Route::get('/liquidaciones/export', [LiquidacionController::class, 'export']);
     Route::get('/liquidaciones', [LiquidacionController::class, 'index']);
     Route::post('/liquidaciones', [LiquidacionController::class, 'store']);
     Route::get('/liquidaciones/{id}', [LiquidacionController::class, 'show']);
     Route::put('/liquidaciones/{id}', [LiquidacionController::class, 'update']);
     Route::post('/liquidaciones/{id}/pagar', [LiquidacionController::class, 'markAsPaid']);
+    Route::delete('/liquidaciones/{id}', [LiquidacionController::class, 'destroy']);
 
     // Conceptos
     Route::apiResource('/conceptos', ConceptoController::class);
