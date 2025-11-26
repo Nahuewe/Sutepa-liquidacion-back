@@ -4,5 +4,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 
 class Concepto extends Model {
-    protected $fillable = ['codigo','descripcion','tipo','monto_default'];
+    protected $fillable = [
+        'codigo',
+        'descripcion',
+        'tipo',
+        'monto_default',
+        'modo_calculo',
+        'valor_calculo'
+    ];
 }

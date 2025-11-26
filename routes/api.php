@@ -6,13 +6,9 @@ use App\Http\Controllers\{
     ConceptoController,
     EmpleadoController,
     LiquidacionController,
-    OrdenDiariaController,
-    RegistroController,
     RolesController,
     SeccionalController,
-    UserController,
-    VotacionController,
-    VotoController
+    UserController
 };
 use Illuminate\Support\Facades\Route;
 
@@ -35,33 +31,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Conceptos
     Route::apiResource('/conceptos', ConceptoController::class);
+    Route::post('/conceptos/{id}/calcular', [ConceptoController::class, 'calcular']);
 
     // Empleados
     Route::apiResource('/empleados', EmpleadoController::class);
-
-    // Votaciones
-    Route::get('/votaciones/exportar', [VotacionController::class, 'exportarVotaciones']);
-    Route::apiResource('/votaciones', VotacionController::class);
-    Route::get('/votaciones/{id}/respuestas', [VotoController::class, 'votosPorVotacion']);
-    Route::get('/votaciones/{votacion}/no-votaron', [VotacionController::class, 'usuariosNoVotaron']);
-    Route::post('/votaciones/{id}/detener', [VotacionController::class, 'detener']);
-
-    // Votos
-    Route::get('/votos/exportar', [VotoController::class, 'exportarVotos']);
-    Route::apiResource('/votos', VotoController::class);
-    Route::post('/votos/respuestas-multiples', [VotoController::class, 'respuestasPorVotaciones']);
-    Route::post('/votos/verificar', [VotoController::class, 'verificarVoto']);
-
-    // Escaneo de QR
-    Route::post('/registrar-ingreso', [RegistroController::class, 'registrarIngreso']);
-    Route::post('/registrar-egreso', [RegistroController::class, 'registrarEgreso']);
-
-    // Ingreso y egreso
-    Route::get('/ingreso', [RegistroController::class, 'getIngresos']);
-    Route::get('/egreso', [RegistroController::class, 'getEgresos']);
-    Route::get('/ingreso/exportar', [RegistroController::class, 'exportarIngresos']);
-    Route::get('/egreso/exportar', [RegistroController::class, 'exportarEgresos']);
-    Route::get('buscar-registro', [RegistroController::class, 'buscarRegistro']);
 
     // Auditoria
     Route::get('/auditoria/exportar', [AuditoriaController::class, 'exportarAuditoria']);
@@ -72,7 +45,4 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/user', UserController::class);
     Route::apiResource('/roles', RolesController::class);
     Route::apiResource('/seccionales', SeccionalController::class);
-
-    // Ordenes Diarias
-    Route::apiResource('/ordenes-diarias', OrdenDiariaController::class);
 });

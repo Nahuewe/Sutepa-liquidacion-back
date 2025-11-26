@@ -15,7 +15,6 @@ class CreateLiquidacionesTable extends Migration {
             $table->decimal('neto', 14, 2)->default(0);
             $table->enum('estado', ['PENDIENTE','APROBADA','PAGADA'])->default('PENDIENTE');
             $table->timestamp('pagada_at')->nullable();
-            $table->json('metadata')->nullable(); // info extra si necesitás
             $table->timestamps();
         });
     }

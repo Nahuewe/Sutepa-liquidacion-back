@@ -10,17 +10,15 @@ class Liquidacion extends Model
 
     protected $fillable = [
         'empleado_id',
-        'periodo',          
+        'periodo',
         'total_haberes',
         'total_descuentos',
         'neto',
         'estado',
         'pagada_at',
-        'metadata',
     ];
 
     protected $casts = [
-        'metadata' => 'array',
         'pagada_at' => 'datetime',
     ];
 

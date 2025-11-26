@@ -25,7 +25,6 @@ class LiquidacionesSeeder extends Seeder
                 'total_descuentos' => $total_descuentos,
                 'neto'             => $neto,
                 'estado'           => 'PENDIENTE',
-                'metadata'         => null,
                 'created_at'       => now(),
                 'updated_at'       => now(),
             ]);

@@ -39,13 +39,14 @@ class ConceptoController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'codigo'        => 'required|string|unique:conceptos,codigo',
-            'descripcion'   => 'required|string',
-            'tipo'          => 'required|in:HABER,DESCUENTO',
-            'monto'         => 'nullable|numeric',
+            'codigo'          => 'required|string|unique:conceptos,codigo',
+            'descripcion'     => 'required|string',
+            'tipo'            => 'required|in:HABER,DESCUENTO',
+            'monto'           => 'nullable|numeric',
+            'modo_calculo'    => 'required|in:FIJO,PORCENTAJE,MEJOR_SUELDO',
+            'valor_calculo'   => 'nullable|numeric',
         ]);
 
-        // Adaptar a la columna real
         $validated['monto_default'] = $validated['monto'];
         unset($validated['monto']);
 
@@ -72,10 +73,12 @@ class ConceptoController extends Controller
         $concepto = Concepto::findOrFail($id);
 
         $validated = $request->validate([
-            'codigo'        => "required|string|unique:conceptos,codigo,$id",
-            'descripcion'   => 'required|string',
-            'tipo'          => 'required|in:HABER,DESCUENTO',
-            'monto'         => 'nullable|numeric',
+            'codigo'          => "required|string|unique:conceptos,codigo,$id",
+            'descripcion'     => 'required|string',
+            'tipo'            => 'required|in:HABER,DESCUENTO',
+            'monto'           => 'nullable|numeric',
+            'modo_calculo'    => 'required|in:FIJO,PORCENTAJE,MEJOR_SUELDO',
+            'valor_calculo'   => 'nullable|numeric',
         ]);
 
         $validated['monto_default'] = $validated['monto'];
@@ -109,5 +112,57 @@ class ConceptoController extends Controller
         $concepto->delete();
 
         return response()->json(['message' => 'Concepto eliminado']);
+    }
+
+    public function calcular(Request $request)
+    {
+        $request->validate([
+            'concepto_id' => 'required|exists:conceptos,id',
+            'items' => 'required|array',
+            'items.*.codigo' => 'required|string',
+            'items.*.monto' => 'nullable|numeric'
+        ]);
+
+        $concepto = Concepto::find($request->concepto_id);
+
+        if ($concepto->modo_calculo === 'FIJO') {
+            return response()->json([
+                'monto' => $concepto->monto_default ?? 0
+            ]);
+        }
+
+        if ($concepto->modo_calculo === 'PORCENTAJE') {
+
+            $base = collect($request->items)
+                ->firstWhere('codigo', 'BAS');
+
+            if (!$base) {
+                return response()->json(['monto' => 0]);
+            }
+
+            $monto = ($base['monto'] ?? 0) * ($concepto->valor_calculo / 100);
+
+            return response()->json([
+                'monto' => round($monto, 2)
+            ]);
+        }
+
+        return response()->json(['monto' => 0]);
+    }
+
+    public function calcularConcepto(Concepto $concepto, $empleado)
+    {
+        switch ($concepto->modo_calculo) {
+
+            case 'FIJO':
+                return $concepto->monto_default;
+
+            case 'PORCENTAJE_MEJOR_SUELDO':
+                $mejor = $empleado->sueldos()->max('monto');
+                return $mejor * ($concepto->valor_calculo / 100);
+
+            default:
+                return 0;
+        }
     }
 }
