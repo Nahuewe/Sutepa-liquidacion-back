@@ -8,26 +8,20 @@ class UserService
 {
     public function UserLista()
     {
-        $User = User::orderBy('apellido', 'asc')->paginate(10);
-
-        return $User;
+        return User::orderBy('apellido', 'asc')->paginate(10);
     }
 
     public function verUser($id)
     {
-        $User = User::where('id', $id)->first();
-
-        return $User;
+        return User::find($id);
     }
 
     public function buscarUser($query)
     {
-        $usuarios = User::where('legajo', 'LIKE', "%$query%")
+        return User::where('username', 'LIKE', "%$query%")
             ->orWhere('nombre', 'LIKE', "%$query%")
             ->orWhere('apellido', 'LIKE', "%$query%")
             ->get();
-
-        return $usuarios;
     }
 
     public function UserActualizar($id, $data)
@@ -35,16 +29,14 @@ class UserService
         $user = User::find($id);
 
         if (!$user) {
-            return response()->json(['message' => 'Usuario no encontrado'], 404);
+            return null;
         }
 
-        $user->nombre       = $data['nombre']       ?? $user->nombre;
-        $user->apellido     = $data['apellido']     ?? $user->apellido;
-        $user->dni          = $data['dni']          ?? $user->dni;
-        $user->legajo       = $data['legajo']       ?? $user->legajo;
-        $user->roles_id     = $data['roles_id']     ?? $user->roles_id;
-        $user->seccional_id = $data['seccional_id'] ?? $user->seccional_id;
-        $user->save();
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+
+        $user->update($data);
 
         return $user;
     }
@@ -53,9 +45,7 @@ class UserService
     {
         $user = User::find($id);
 
-        if (!$user) {
-            return null;
-        }
+        if (!$user) return null;
 
         $user->delete();
 

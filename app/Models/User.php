@@ -10,21 +10,27 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use Notifiable;
-    use SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
     protected $fillable = [
         'nombre',
         'apellido',
         'dni',
         'legajo',
+        'username',
+        'password',
+        'telefono',
+        'correo',
         'roles_id',
+        'estados_id',
         'seccional_id',
+        'login_attempts',
+        'last_login_attempt',
+        'is_blocked',
     ];
 
     protected $hidden = [
+        'password',
         'remember_token',
     ];
 
@@ -40,10 +46,5 @@ class User extends Authenticatable
     public function seccional()
     {
         return $this->belongsTo(Seccional::class, 'seccional_id');
-    }
-
-    public function votos()
-    {
-        return $this->hasMany(Voto::class, 'asistente_id');
     }
 }

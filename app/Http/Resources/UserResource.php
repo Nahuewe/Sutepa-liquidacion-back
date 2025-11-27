@@ -9,18 +9,21 @@ class UserResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-
         return [
-            'id'           => $this->resource->id,
-            'nombre'       => $this->resource->nombre,
-            'apellido'     => $this->resource->apellido,
-            'dni'          => $this->resource->dni,
-            'legajo'       => $this->resource->legajo,
-            'rol'          => $this->resource->rol->nombre,
-            'roles_id'     => (int) $this->resource->roles_id,
-            'seccional'    => $this->resource->seccional->nombre,
-            'seccional_id' => (int) $this->resource->seccional_id,
-            'creada'       => $this->resource->created_at
+            'id'           => $this->id,
+            'nombre'       => $this->nombre,
+            'apellido'     => $this->apellido,
+            'dni'          => $this->dni,
+            'legajo'       => $this->legajo,
+            'username'     => $this->username,
+            'telefono'     => $this->telefono,
+            'correo'       => $this->correo,
+            'rol'          => $this->rol->nombre,
+            'roles_id'     => (int) $this->roles_id,
+            'seccional'    => $this->seccional->nombre,
+            'seccional_id' => (int) $this->seccional_id,
+            'estado'       => $this->estado->nombre,
+            'creada'       => $this->created_at,
         ];
     }
 }
