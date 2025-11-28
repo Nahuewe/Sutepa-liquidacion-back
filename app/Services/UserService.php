@@ -24,6 +24,15 @@ class UserService
             ->get();
     }
 
+    public function UserCrear($data)
+    {
+        if (isset($data['password'])) {
+            $data['password'] = bcrypt($data['password']);
+        }
+
+        return User::create($data);
+    }
+
     public function UserActualizar($id, $data)
     {
         $user = User::find($id);

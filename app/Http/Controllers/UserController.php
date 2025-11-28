@@ -32,6 +32,22 @@ class UserController extends Controller
         return new UserResource($User);
     }
 
+    public function store(UserRequest $request)
+    {
+        try {
+            $validated = $request->validated();
+
+            $user = $this->UserService->UserCrear($validated);
+
+            return response()->json([
+                "message" => "Usuario creado exitosamente",
+                "data" => new UserResource($user)
+            ], 201);
+        } catch (\Exception $e) {
+            throw new CustomizeException($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR, $e);
+        }
+    }
+
     public function update(UserRequest $request, $UserId)
     {
         try {
